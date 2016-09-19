@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Airport</string>
+    <string name="title_activity_enter">EnterActivity</string>
+    <string name="button_authorization">Authorization</string>
+    <string name="button_registration">Registration</string>
+    <string name="title_activity_authorization">Authorization</string>
+
+    <string name="title_activity_registration">RegistrationActivity</string>
+    <string name="button_register">Register</string>
+    <string name="button_authorize">Log in</string>
+
+    <string name="login"> login </string>
+    <string name="password"> password </string>
+    <string name="passport"> passport </string>
+    <string name="name">name</string>
+
+    <string name="registration_input_erorr">Fill in all fields</string>
+    <string name="wrong_pas_log">Password or login is incorrect</string>
+    <string name="title_activity_client_menu">ClientMenuActivity</string>
+    <string name="title_activity_root_menu">RootMenuActivity</string>
+    <string name="title_activity_root_list">RootListActivity</string>
+    
+    <string name="root_menu_list">View all clients</string>
+
+</resources>

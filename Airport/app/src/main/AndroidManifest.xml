@@ -60,6 +60,14 @@
         <activity
             android:name=".Root.RootListActivity"
             android:label="@string/title_activity_root_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ClientEditActivity"
+            android:label="@string/title_activity_client__edit_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MakeOrder.MakeOrderActivity"
+            android:label="@string/title_activity_make_order"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

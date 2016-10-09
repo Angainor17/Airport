@@ -1,22 +1,26 @@
 package com.example.angai.airport;
 
 import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
-import com.example.angai.airport.DataBase.AirportDatabase;
+import com.example.angai.airport.DataBase.AirportDb;
+import com.example.angai.airport.DataBase.AirportDbHelper;
+import com.example.angai.airport.MakeOrder.MakeOrderActivity;
 
-public class ClientMenuActivity extends AppCompatActivity {
+public class ClientMenuActivity extends AppCompatActivity implements View.OnClickListener{
+    final  int ID_1 =1;
+    public static ContentValues  ActualClient;
+
     Button btn;
+    TextView tvActualClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,27 +29,55 @@ public class ClientMenuActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        btn = (Button) findViewById(R.id.buttonClientMenu);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AirportDatabase airportDatabase = new AirportDatabase(ClientMenuActivity.this);
-                SQLiteDatabase db =  airportDatabase.getWritableDatabase();
+        btn = (Button) findViewById(R.id.buttonBookTicket);
+        btn.setOnClickListener(this);
 
-                Cursor c = db.query(AirportDatabase.TABLENAME_CLIENT,null,null,null,null,null,null);
-                Log.d("database1", "Count: " + c.getCount());
-
-                while(c.moveToNext()){
-                    Log.d("database1",c.getString(c.getColumnIndex(c.getColumnNames()[AirportDatabase.CLIENT_COLUMN_LOGIN_INT])));
-                }
-
-                db.close();
-                airportDatabase.close();
-
-
-            }
-        });
-
+        ActualClient = AirportDbHelper.getClientById(this, getIntent().getLongExtra("id", 0));
+        tvActualClient = (TextView)findViewById(R.id.tvActualClientName);
+        String Name = (String)ActualClient.getAsString(AirportDb.CLIENT_COLUMN_NAME);
+        tvActualClient.setText(this.getString(R.string.welcome) + " " + Name);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item,menu);
+        return  true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item:{
+                Intent intent = new Intent(getApplicationContext(),ClientEditActivity.class);
+                intent.putExtra("id",ActualClient.getAsInteger("id"));
+                startActivityForResult(intent,ID_1);
+                break;
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == ID_1){
+            if(resultCode == RESULT_OK) {
+                ActualClient = AirportDbHelper.getClientById(this,data.getIntExtra("id", 0));
+                tvActualClient.setText(getString(R.string.welcome) + " " + ActualClient.getAsString(AirportDb.CLIENT_COLUMN_NAME));
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.buttonBookTicket:{
+                Intent intent = new Intent(this,MakeOrderActivity.class);
+                startActivity(intent);
+                break;
+            }
+        }
+
+
+    }
 }

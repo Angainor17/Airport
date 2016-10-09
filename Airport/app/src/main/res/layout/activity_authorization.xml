@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,8 +11,8 @@
     tools:context="com.example.angai.airport.AuthorizationActivity">
 
     <!-- Login progress -->
+
     <ProgressBar
-        android:id="@+id/login_progress"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,14 +20,14 @@
         android:visibility="gone" />
 
     <ScrollView
-        android:id="@+id/login_form"
         android:layout_width="match_parent"
+        android:id="@+id/scrollview1"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/linlayout"
             android:orientation="vertical">
 
             <EditText
@@ -64,4 +64,25 @@
 
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="If you have no account ..."
+        android:id="@+id/tvRegNoAccount"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@+id/scrollview1"
+        android:layout_marginTop="350dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:id="@+id/btnRegNoAccaunt"
+        android:layout_marginTop="40dp"
+        android:layout_alignTop="@+id/tvRegNoAccount"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

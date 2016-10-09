@@ -6,11 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.angai.airport.DataBase.AirportDatabase;
+import com.example.angai.airport.DataBase.AirportDb;
 import com.example.angai.airport.R;
 
 /**
@@ -21,28 +20,28 @@ public class ClientAdapter extends BaseAdapter {
     SQLiteDatabase db;
     LayoutInflater lInflater;
 
-    public ClientAdapter(Context context,SQLiteDatabase db){
-        this.db = db;
+    public ClientAdapter(Context context){
         this.context = context;
+        AirportDb airportDb = new AirportDb(context);
+        db = airportDb.getWritableDatabase();
         lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public int getCount() {
-        Cursor c = db.query(AirportDatabase.TABLENAME_CLIENT,null,null,null,null,null,AirportDatabase.CLIENT_COLUMN_NAME);
+        Cursor c = db.query(AirportDb.TABLENAME_CLIENT,null,null,null,null,null, AirportDb.CLIENT_COLUMN_NAME);
         return c.getCount();
     }
 
     @Override
     public Object getItem(int position) {
-        AirportDatabase airportDatabase = new AirportDatabase(context);
-        SQLiteDatabase db1 = airportDatabase.getWritableDatabase();
-        Cursor c = db1.query(AirportDatabase.TABLENAME_CLIENT,null,null,null,null,null,AirportDatabase.CLIENT_COLUMN_NAME);
-        c.moveToFirst();
+        Cursor c = db.query(AirportDb.TABLENAME_CLIENT,null,null,null,null,null, AirportDb.CLIENT_COLUMN_NAME);
+
         if(position > c.getCount()){
             return null;
         }
 
-        for(int i=0; i < position; i++){
+        c.moveToFirst();
+        for(int i = 0; i < position; i++){
             c.moveToNext();
         }
 
@@ -64,10 +63,10 @@ public class ClientAdapter extends BaseAdapter {
         Cursor c = (Cursor)getItem(position);
 
 
-        String name = c.getString(c.getColumnIndex(AirportDatabase.CLIENT_COLUMN_NAME));
-        String login = "login: " + c.getString(c.getColumnIndex(AirportDatabase.CLIENT_COLUMN_LOGIN));
-        String password = "password: " + c.getString(c.getColumnIndex(AirportDatabase.CLIENT_COLUMN_PASSWORD));
-        String passport = c.getString(c.getColumnIndex(AirportDatabase.CLIENT_COLUMN_PASSPORT));
+        String name = c.getString(c.getColumnIndex(AirportDb.CLIENT_COLUMN_NAME));
+        String login = "login: " + c.getString(c.getColumnIndex(AirportDb.CLIENT_COLUMN_LOGIN));
+        String password = "password: " + c.getString(c.getColumnIndex(AirportDb.CLIENT_COLUMN_PASSWORD));
+        String passport = c.getString(c.getColumnIndex(AirportDb.CLIENT_COLUMN_PASSPORT));
 
         ((TextView) view.findViewById(R.id.elementLogin)).setText(login);
         ((TextView) view.findViewById(R.id.elementPassport)).setText(passport);

@@ -19,7 +19,36 @@
     <string name="title_activity_client_menu">ClientMenuActivity</string>
     <string name="title_activity_root_menu">RootMenuActivity</string>
     <string name="title_activity_root_list">RootListActivity</string>
-    
+
     <string name="root_menu_list">View all clients</string>
+    <string name="client_list_header">Clients</string>
+
+    <string name="delete_client">Delete client</string>
+    <string name="edit_client">Edit client</string>
+    <string name="Save_changes">Save changes</string>
+    <string name="no_changes">No changes</string>
+    <string name="element_was_updated">Element was updated</string>
+    <string name="welcome">Welcome, </string>
+    <string name="book_a_ticket">Book a ticket </string>
+
+
+    <string name="title_activity_client__edit_">Client_Edit_Activity</string>
+
+    <string name="press_on_me">Press on me</string>
+    <string name="hide">Hide</string>
+
+    <string name="title_activity_make_order">MakeOrderActivity</string>
+
+
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="cost">Cost</string>
+    <string name="places">Places</string>
+
+    <string name="choose_item">Choose item</string>
+
+
+
+
 
 </resources>

@@ -81,9 +81,8 @@ public class ClientEditActivity extends AppCompatActivity {
         if(!etName.getText().toString().equals(client.getAsString(AirportDb.CLIENT_COLUMN_NAME))) return true;
         if(!etPassport.getText().toString().equals(client.getAsString(AirportDb.CLIENT_COLUMN_PASSPORT))) return true;
         if(!etPassword.getText().toString().equals(client.getAsString(AirportDb.CLIENT_COLUMN_PASSWORD))) return true;
-        if(!etLogin.getText().toString().equals(client.getAsString(AirportDb.CLIENT_COLUMN_LOGIN))) return true;
+        return !etLogin.getText().toString().equals(client.getAsString(AirportDb.CLIENT_COLUMN_LOGIN));
 
-        return  false;
     }
 
 }

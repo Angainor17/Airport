@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.angai.airport.ClientOrder.ClientOrderActivity;
 import com.example.angai.airport.DataBase.AirportDb;
 import com.example.angai.airport.DataBase.AirportDbHelper;
 import com.example.angai.airport.MakeOrder.MakeOrderActivity;
@@ -20,6 +21,7 @@ public class ClientMenuActivity extends AppCompatActivity implements View.OnClic
     public static ContentValues  ActualClient;
 
     Button btn;
+    Button btnMyOrders;
     TextView tvActualClient;
 
     @Override
@@ -32,9 +34,12 @@ public class ClientMenuActivity extends AppCompatActivity implements View.OnClic
         btn = (Button) findViewById(R.id.buttonBookTicket);
         btn.setOnClickListener(this);
 
+        btnMyOrders = (Button) findViewById(R.id.btnMyOrders);
+        btnMyOrders.setOnClickListener(this);
+
         ActualClient = AirportDbHelper.getClientById(this, getIntent().getLongExtra("id", 0));
         tvActualClient = (TextView)findViewById(R.id.tvActualClientName);
-        String Name = (String)ActualClient.getAsString(AirportDb.CLIENT_COLUMN_NAME);
+        String Name = ActualClient.getAsString(AirportDb.CLIENT_COLUMN_NAME);
         tvActualClient.setText(this.getString(R.string.welcome) + " " + Name);
     }
 
@@ -72,7 +77,12 @@ public class ClientMenuActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.buttonBookTicket:{
-                Intent intent = new Intent(this,MakeOrderActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MakeOrderActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.btnMyOrders: {
+                Intent intent = new Intent(this, ClientOrderActivity.class);
                 startActivity(intent);
                 break;
             }

@@ -52,7 +52,7 @@ public class OrderAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return contentValuesArrayList.toArray(new ContentValues[contentValuesArrayList.size()])[position].getAsLong("id");
     }
 
     @Override
@@ -126,10 +126,15 @@ public class OrderAdapter extends BaseAdapter {
                 int clientsInFlightCounter = 0;
 
                 if (cursorClient.moveToFirst()) {
+                    if (cursorClient.isFirst())
                     do {
-                        if (cursorFlight.getLong(cursorFlight.getColumnIndex(AirportDb.FLIGHT_COLUMN_ID)) ==
-                                cursorClient.getInt(cursorClient.getColumnIndex(AirportDb.TIMETABLE_FLIGHT_COLUMN_ID_FLIGHT))) {
-                            clientsInFlightCounter++;
+                        try {
+                            if (cursorFlight.getLong(cursorFlight.getColumnIndex(AirportDb.FLIGHT_COLUMN_ID)) ==
+                                    cursorClient.getInt(cursorClient.getColumnIndex(AirportDb.TIMETABLE_FLIGHT_COLUMN_ID_FLIGHT))) {
+                                clientsInFlightCounter++;
+                            }
+                        } catch (Exception e) {
+                            clientsInFlightCounter = 0;
                         }
 
                     } while (cursorClient.moveToNext());
@@ -192,6 +197,7 @@ public class OrderAdapter extends BaseAdapter {
 
                         Log.d("TAG"," ");
 
+                        cv.put(AirportDb.COLUMN_ID, c.getInt(c.getColumnIndex(AirportDb.COLUMN_ID)));
                         cv.put(AirportDb.TIMETABLE_FLIGHT_COLUMN_DATE,c.getString(c.getColumnIndex(AirportDb.TIMETABLE_FLIGHT_COLUMN_DATE)));
                         cv.put(AirportDb.TIMETABLE_FLIGHT_COLUMN_TIME,c.getString(c.getColumnIndex(AirportDb.TIMETABLE_FLIGHT_COLUMN_TIME)));
                         List.add(cv);

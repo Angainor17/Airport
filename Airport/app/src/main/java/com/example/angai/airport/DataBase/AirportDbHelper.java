@@ -100,6 +100,49 @@ public class AirportDbHelper {
         return null;
     }
 
+    public static ContentValues getTimetableFlightById(Context context, long id) {
+        AirportDb airportDb = new AirportDb(context);
+        SQLiteDatabase db = airportDb.getWritableDatabase();
+
+        db.beginTransaction();
+        ContentValues cv = new ContentValues();
+        String TableName = AirportDb.TABLENAME_TIMETABLE_FLIGHT;
+        Cursor c = db.query(TableName, null, null, null, null, null, null);
+
+        c.moveToFirst();
+        do {
+            if (c.getInt(c.getColumnIndex("id")) == id) {
+                cv.put(AirportDb.TIMETABLE_FLIGHT_COLUMN_DATE, c.getString(c.getColumnIndex(AirportDb.TIMETABLE_FLIGHT_COLUMN_DATE)));
+                cv.put(AirportDb.TIMETABLE_FLIGHT_COLUMN_TIME, c.getString(c.getColumnIndex(AirportDb.TIMETABLE_FLIGHT_COLUMN_TIME)));
+                long id_flight = c.getInt(c.getColumnIndex(AirportDb.TIMETABLE_FLIGHT_COLUMN_ID_FLIGHT));
+                Cursor cursor = db.query(AirportDb.TABLENAME_FLIGHT, null, null, null, null, null, null);
+                if (cursor.moveToFirst()) {
+                    do {
+                        if (cursor.getInt(cursor.getColumnIndex(AirportDb.COLUMN_ID)) == id_flight) {
+                            cv.put(AirportDb.FLIGHT_COLUMN_FROM, cursor.getString(cursor.getColumnIndex(AirportDb.FLIGHT_COLUMN_FROM)));
+                            cv.put(AirportDb.FLIGHT_COLUMN_TO, cursor.getString(cursor.getColumnIndex(AirportDb.FLIGHT_COLUMN_TO)));
+                            cv.put(AirportDb.FLIGHT_COLUMN_COST, cursor.getInt(cursor.getColumnIndex(AirportDb.FLIGHT_COLUMN_COST)));
+                            db.setTransactionSuccessful();
+                            db.endTransaction();
+                            return cv;
+                        }
+                    }
+                    while (cursor.moveToNext());
+                }
+
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                return null;
+            }
+        }
+        while (c.moveToNext());
+
+        db.setTransactionSuccessful();
+        db.endTransaction();
+
+        return null;
+    }
+
     public static ContentValues getClientByLogin(Context context, String Login){
         AirportDb airportDb = new AirportDb(context);
         SQLiteDatabase db = airportDb.getWritableDatabase();
@@ -137,7 +180,7 @@ public class AirportDbHelper {
         long id = 0;
 
             db.beginTransaction();
-            id =  db.insert(AirportDb.TABLENAME_CLIENT, null, cv);
+        id = db.insert(tableName, null, cv);
 
             db.setTransactionSuccessful();
             db.endTransaction();
@@ -163,5 +206,13 @@ public class AirportDbHelper {
             return arr;
         }
         return  null;
+    }
+
+    public static Cursor getTickets(Context context) {
+        AirportDb airportDb = new AirportDb(context);
+        SQLiteDatabase db = airportDb.getWritableDatabase();
+
+        Cursor c = db.query(AirportDb.VIEW_TICKET, null, null, null, null, null, null);
+        return c;
     }
 }

@@ -30,7 +30,7 @@ public class AuthorizationActivity extends AppCompatActivity implements View.OnC
         setSupportActionBar(toolbar);
 
         buttonLogIn =(Button)findViewById(R.id.button_aut_login);
-        btnReg = (Button) findViewById(R.id.btnRegNoAccaunt);
+        btnReg = (Button) findViewById(R.id.btnRegNoAccount);
 
         tvReg = (TextView)findViewById(R.id.tvRegNoAccount);
 
@@ -70,7 +70,7 @@ public class AuthorizationActivity extends AppCompatActivity implements View.OnC
 
                 if(AirportDbHelper.Consist(this, AirportDb.TABLENAME_CLIENT,cv)){
                     cv = AirportDbHelper.getClientByLogin(this, etLogin.getText().toString());
-                    Intent intent = new Intent(AuthorizationActivity.this,ClientMenuActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), ClientMenuActivity.class);
                     intent.putExtra("id",cv.getAsLong("id"));
                     startActivity(intent);
                     finish();
@@ -84,7 +84,7 @@ public class AuthorizationActivity extends AppCompatActivity implements View.OnC
                 }
                 break;
             }
-            case R.id.btnRegNoAccaunt:{
+            case R.id.btnRegNoAccount: {
                 Intent intent = new Intent(this,RegistrationActivity.class);
                 startActivity(intent);
                 finish();

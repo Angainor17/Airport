@@ -1,6 +1,6 @@
 package com.example.angai.airport.MakeOrder;
 
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +28,6 @@ public class MakeOrderActivity extends AppCompatActivity {
     ListView listViewOrderResult;
     EditText etCostLow, etCostHigh, etPlaces;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +47,15 @@ public class MakeOrderActivity extends AppCompatActivity {
 
         listViewOrderResult = (ListView)findViewById(R.id.listViewMakeOrder);
 
+        listViewOrderResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), SelectedOrderActivity.class);
+                intent.putExtra("id_flight", id);
+                startActivity(intent);
+            }
+        });
+
         toolbar.setTitle(R.string.press_on_me);
 
         toolbar.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +72,6 @@ public class MakeOrderActivity extends AppCompatActivity {
 
             }
         });
-
 
         ///////////////////SPINNERS////////////////////////////
         ArrayAdapter<String> adapterFrom = new ArrayAdapter<String>(this,R.layout.spinner_item,
@@ -86,7 +93,6 @@ public class MakeOrderActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
             }
-
         };
 
         spinnerFrom.setOnItemSelectedListener(onItemSelectedListener);
@@ -102,7 +108,6 @@ public class MakeOrderActivity extends AppCompatActivity {
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -116,18 +121,12 @@ public class MakeOrderActivity extends AppCompatActivity {
             }
         };
 
-
         etCostHigh.addTextChangedListener(textWatcher);
         etCostLow.addTextChangedListener(textWatcher);
         etPlaces.addTextChangedListener(textWatcher);
 
-
-        etCostLow.setText("0");
-        etCostHigh.setText("99999");
-        etPlaces.setText("0");
+        ChangeListener();
     }
-
-
 
     private String[] spinnersFromToConstructor(String column){
         ArrayList<String> list = new ArrayList<>();
@@ -151,10 +150,7 @@ public class MakeOrderActivity extends AppCompatActivity {
     }
 
     private void FillFlightList(OrderParameters orderParameters){
-        AirportDb airportDb = new AirportDb(getApplicationContext());
-        SQLiteDatabase db = airportDb.getWritableDatabase();
         OrderAdapter orderAdapter = new OrderAdapter(getApplicationContext(), orderParameters);
-
         listViewOrderResult.setAdapter(orderAdapter);
     }
 
@@ -173,13 +169,13 @@ public class MakeOrderActivity extends AppCompatActivity {
         if(etCostHigh.getText().toString().length() > 0){
             costHigh = Integer.valueOf(etCostHigh.getText().toString());
         }else{
-            costHigh = 0;
+            costHigh = 9999;
         }
 
         if(etPlaces.getText().toString().length() > 0){
             places = Integer.valueOf(etPlaces.getText().toString());
         }else{
-            places = 0;
+            places = 1;
         }
 
         OrderParameters orderParameters = new OrderParameters(
@@ -192,4 +188,4 @@ public class MakeOrderActivity extends AppCompatActivity {
         FillFlightList(orderParameters);
     }
 
-    }
+}

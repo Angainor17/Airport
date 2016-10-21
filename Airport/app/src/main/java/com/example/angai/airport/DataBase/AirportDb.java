@@ -13,6 +13,8 @@ public class AirportDb extends SQLiteOpenHelper {
     final static String DATABASE_NAME = "airportDb";
     final static int DATABASE_VERSION = 1;
 
+    public final static String VIEW_TICKET = "ticket";
+
     public final static String TABLENAME_CLIENT = "client";
     public final static String TABLENAME_FLIGHT = "flight";
     public final static String TABLENAME_PLANE = "plane";
@@ -99,6 +101,8 @@ public class AirportDb extends SQLiteOpenHelper {
         LoadFlight(db);
         LoadTimetableFlight(db);
        // LoadTimetableFlightClient(db);
+
+        createViewTicket(db);
     }
 
     @Override
@@ -170,8 +174,28 @@ public class AirportDb extends SQLiteOpenHelper {
         ContentValues root = new ContentValues();
         root.put(CLIENT_COLUMN_LOGIN, "root");
         root.put(CLIENT_COLUMN_PASSWORD, "root");
+        root.put(CLIENT_COLUMN_PASSPORT, "root");
+        root.put(CLIENT_COLUMN_NAME, "root");
 
         db.insert(TABLENAME_CLIENT, null, root);
+    }
+
+    private void createViewTicket(SQLiteDatabase db) {
+        String string = "CREATE VIEW " + VIEW_TICKET + " AS SELECT " +
+                TABLENAME_TIMETABLE_FLIGHT_CLIENT + "." + TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_CLIENT + ", " +
+                TABLENAME_TIMETABLE_FLIGHT + "." + TIMETABLE_FLIGHT_COLUMN_DATE + ", " +
+                TABLENAME_TIMETABLE_FLIGHT + "." + TIMETABLE_FLIGHT_COLUMN_TIME + ", " +
+                TABLENAME_FLIGHT + "." + FLIGHT_COLUMN_FROM + ", " +
+                TABLENAME_FLIGHT + "." + FLIGHT_COLUMN_TO + ", " +
+                TABLENAME_FLIGHT + "." + FLIGHT_COLUMN_COST + " " +
+                "FROM " + TABLENAME_TIMETABLE_FLIGHT_CLIENT + " " +
+                "INNER JOIN " + TABLENAME_TIMETABLE_FLIGHT + " ON " +
+                TABLENAME_TIMETABLE_FLIGHT_CLIENT + "." + TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT + " = " +
+                TABLENAME_TIMETABLE_FLIGHT + "." + COLUMN_ID + " " +
+                "INNER JOIN " + TABLENAME_FLIGHT + " ON " +
+                TABLENAME_TIMETABLE_FLIGHT + "." + COLUMN_ID + " = " +
+                TABLENAME_FLIGHT + "." + COLUMN_ID + " ";
+        db.execSQL(string);
     }
 
 }

@@ -51,7 +51,7 @@ public class MakeOrderActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), SelectedOrderActivity.class);
-                intent.putExtra("id_flight", id);
+                intent.putExtra("id_timetable_flight", id);
                 startActivity(intent);
             }
         });

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.angai.airport.ClientMenuActivity;
 import com.example.angai.airport.DataBase.AirportDb;
 import com.example.angai.airport.DataBase.AirportDbHelper;
 import com.example.angai.airport.R;
@@ -42,7 +43,7 @@ public class ClientOrderAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return contentValuesArrayList.toArray(new ContentValues[contentValuesArrayList.size()])[position].getAsLong("id");
+        return contentValuesArrayList.toArray(new ContentValues[contentValuesArrayList.size()])[position].getAsInteger(AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT);
     }
 
     @Override
@@ -67,6 +68,12 @@ public class ClientOrderAdapter extends BaseAdapter {
         ((TextView) view.findViewById(R.id.ticket_list_element_cost)).setText(
                 context.getString(R.string.cost) + ": " +
                         cv.get(AirportDb.FLIGHT_COLUMN_COST) + ".");
+
+        int id_client = ClientMenuActivity.ActualClient.getAsInteger(AirportDb.COLUMN_ID);
+        int id_flight = cv.getAsInteger(AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT);
+        long numberOfTickets = RowCounter(id_client, id_flight);
+
+        ((TextView) view.findViewById(R.id.ticket_List_element_counter)).setText("" + numberOfTickets);
         return view;
     }
 
@@ -76,7 +83,7 @@ public class ClientOrderAdapter extends BaseAdapter {
         if (c.moveToFirst()) {
             do {
                 ContentValues cv = new ContentValues();
-
+                cv.put(AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT, c.getInt(c.getColumnIndex(AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT)));
                 cv.put(AirportDb.TIMETABLE_FLIGHT_COLUMN_DATE, c.getString(c.getColumnIndex(AirportDb.TIMETABLE_FLIGHT_COLUMN_DATE)));
                 cv.put(AirportDb.TIMETABLE_FLIGHT_COLUMN_TIME, c.getString(c.getColumnIndex(AirportDb.TIMETABLE_FLIGHT_COLUMN_TIME)));
                 cv.put(AirportDb.FLIGHT_COLUMN_COST, c.getInt(c.getColumnIndex(AirportDb.FLIGHT_COLUMN_COST)));
@@ -89,4 +96,16 @@ public class ClientOrderAdapter extends BaseAdapter {
         }
         return List;
     }
+
+    public long RowCounter(long id_client, long id_flight) {
+        long result = 0;
+        String countQuery =
+                "SELECT * FROM " + AirportDb.TABLENAME_TIMETABLE_FLIGHT_CLIENT + " " +
+                        "WHERE " + AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_CLIENT + " = ? " +
+                        "AND " + AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT + " = ? ";
+        Cursor c = db.rawQuery(countQuery, new String[]{"" + id_client, "" + id_flight});
+
+        return c.getCount();
+    }
+
 }

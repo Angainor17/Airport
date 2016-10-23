@@ -212,7 +212,29 @@ public class AirportDbHelper {
         AirportDb airportDb = new AirportDb(context);
         SQLiteDatabase db = airportDb.getWritableDatabase();
 
-        Cursor c = db.query(AirportDb.VIEW_TICKET, null, null, null, null, null, null);
-        return c;
+        return db.query(true, AirportDb.VIEW_TICKET, null, null, null, null, null, null, null);
+    }
+
+    public static void DeleteTicket(Context context, long id_client, long id_flight, long counter) {
+        AirportDb airportDb = new AirportDb(context);
+        SQLiteDatabase db = airportDb.getWritableDatabase();
+        String number_of_elements_to_delete = "";
+
+        if (counter > 0) {
+            number_of_elements_to_delete += " LIMIT " + counter;
+        } else {
+            number_of_elements_to_delete = "";
+        }
+
+        String delete_command = "DELETE FROM " + AirportDb.TABLENAME_TIMETABLE_FLIGHT_CLIENT + " WHERE  " +
+                AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID + " IN  (SELECT " +
+                AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID + " FROM " +
+                AirportDb.TABLENAME_TIMETABLE_FLIGHT_CLIENT + " WHERE " +
+                AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_CLIENT + " = " + id_client + " AND " +
+                AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT + " = " + id_flight + " " +
+                //" ORDER BY " + AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_CLIENT + " " +
+                number_of_elements_to_delete + " ) ";
+
+        db.execSQL(delete_command);
     }
 }

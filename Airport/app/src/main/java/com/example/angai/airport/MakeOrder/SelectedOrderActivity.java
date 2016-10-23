@@ -17,7 +17,7 @@ import com.example.angai.airport.DataBase.AirportDbHelper;
 import com.example.angai.airport.R;
 
 public class SelectedOrderActivity extends AppCompatActivity implements View.OnClickListener {
-    private long id_flight;
+    private long id_timetable_flight;
     private ContentValues cv_flight;
 
     Button btnOrder;
@@ -46,11 +46,12 @@ public class SelectedOrderActivity extends AppCompatActivity implements View.OnC
         tvTotalCost = (TextView) findViewById(R.id.tv_selected_order_total_cost);
         etPlaces = (EditText) findViewById(R.id.etSelectedOrderPlaces);
 
-        id_flight = getIntent().getLongExtra("id_flight", -1);
-        if (id_flight == -1) {
+
+        id_timetable_flight = getIntent().getLongExtra("id_timetable_flight", -1);
+        if (id_timetable_flight == -1) {
             finish();
         }
-        cv_flight = AirportDbHelper.getTimetableFlightById(getApplicationContext(), id_flight);
+        cv_flight = AirportDbHelper.getTimetableFlightById(getApplicationContext(), id_timetable_flight);
 
         tvFromTo.setText(cv_flight.getAsString(AirportDb.FLIGHT_COLUMN_FROM) + " - " +
                 cv_flight.getAsString(AirportDb.FLIGHT_COLUMN_TO)
@@ -92,14 +93,15 @@ public class SelectedOrderActivity extends AppCompatActivity implements View.OnC
     }
 
     public void FinishOrder() {
-        ContentValues cv = new ContentValues();
-        cv.put(AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT, id_flight);
-        cv.put(AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_CLIENT, ClientMenuActivity.ActualClient.getAsInteger(AirportDb.COLUMN_ID));
-        AirportDbHelper.Insert(getApplication(), AirportDb.TABLENAME_TIMETABLE_FLIGHT_CLIENT, cv);
-
-        Toast.makeText(this, getString(R.string.order_is_accepted), Toast.LENGTH_SHORT);
-
-        finish();
+        if (etPlaces.getText().length() > 0) {
+            for (int i = 0; i < Integer.valueOf(etPlaces.getText().toString()); i++) {
+                ContentValues cv = new ContentValues();
+                cv.put(AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT, id_timetable_flight);
+                cv.put(AirportDb.TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_CLIENT, ClientMenuActivity.ActualClient.getAsInteger(AirportDb.COLUMN_ID));
+                AirportDbHelper.Insert(getApplication(), AirportDb.TABLENAME_TIMETABLE_FLIGHT_CLIENT, cv);
+            }
+            Toast.makeText(this, getString(R.string.order_is_accepted), Toast.LENGTH_SHORT);
+        }
     }
 
     @Override
@@ -107,6 +109,7 @@ public class SelectedOrderActivity extends AppCompatActivity implements View.OnC
         switch (v.getId()) {
             case R.id.btn_selected_order_order: {
                 FinishOrder();
+                finish();
                 break;
             }
         }

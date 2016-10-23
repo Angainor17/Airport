@@ -50,6 +50,8 @@
     <string name="total_cost">Total cost </string>
     <string name="order_is_accepted">Order is accepted </string>
     <string name="my_orders">My orders </string>
+    <string name="return_ticket">Return ticket</string>
+    <string name="return_all_tickets">Return all tickets</string>
 
 
 </resources>

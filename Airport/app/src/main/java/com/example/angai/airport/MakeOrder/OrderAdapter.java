@@ -52,7 +52,7 @@ public class OrderAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return contentValuesArrayList.toArray(new ContentValues[contentValuesArrayList.size()])[position].getAsLong("id");
+        return contentValuesArrayList.toArray(new ContentValues[contentValuesArrayList.size()])[position].getAsLong("id_timetable_flight");
     }
 
     @Override
@@ -197,7 +197,7 @@ public class OrderAdapter extends BaseAdapter {
 
                         Log.d("TAG"," ");
 
-                        cv.put(AirportDb.COLUMN_ID, c.getInt(c.getColumnIndex(AirportDb.COLUMN_ID)));
+                        cv.put("id_timetable_flight", c.getInt(c.getColumnIndex(AirportDb.COLUMN_ID)));
                         cv.put(AirportDb.TIMETABLE_FLIGHT_COLUMN_DATE,c.getString(c.getColumnIndex(AirportDb.TIMETABLE_FLIGHT_COLUMN_DATE)));
                         cv.put(AirportDb.TIMETABLE_FLIGHT_COLUMN_TIME,c.getString(c.getColumnIndex(AirportDb.TIMETABLE_FLIGHT_COLUMN_TIME)));
                         List.add(cv);

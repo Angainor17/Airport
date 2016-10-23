@@ -52,6 +52,7 @@ public class AirportDb extends SQLiteOpenHelper {
 
     public final static String TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_CLIENT = "id_client";
     public final static String TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT = "id_timetable_flight";
+    public final static String TIMETABLE_FLIGHT_CLIENT_COLUMN_ID = "id";
 
     public AirportDb(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -88,6 +89,7 @@ public class AirportDb extends SQLiteOpenHelper {
                 + ");");
 
         db.execSQL("create table  " + TABLENAME_TIMETABLE_FLIGHT_CLIENT + "("
+                + TIMETABLE_FLIGHT_CLIENT_COLUMN_ID + " INTEGER primary key autoincrement, "
                 + TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT + " INTEGER, "
                 + TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_CLIENT + " INTEGER, "
                 + "FOREIGN KEY(" + TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT + ") REFERENCES " + TABLENAME_TIMETABLE_FLIGHT + "(" + COLUMN_ID + "), "
@@ -124,9 +126,9 @@ public class AirportDb extends SQLiteOpenHelper {
 
     private void LoadFlight(SQLiteDatabase db){
         Integer planes[] = {1,1,2,3};
-        String fromPlaces[] = {"Sevastopol","Moscow","Sevastopol","New-York"};
-        String toPlaces[] = {"Madagascar","Berlin","Berlin","Berlin"};
-        Integer costs[] = {7890,1,3213,1000};
+        String fromPlaces[] = {"Sevastopol", "Moscow", "Sevastopol", "New-York"};
+        String toPlaces[] = {"Madagascar", "Berlin", "Berlin", "Berlin"};
+        Integer costs[] = {7890, 1, 3213, 1000};
 
         for(int i = 0; i < planes.length; i++) {
             ContentValues element = new ContentValues();
@@ -144,7 +146,7 @@ public class AirportDb extends SQLiteOpenHelper {
 
         String dates[] = {"17:10:2016","29:01:2017","03:05:2016","03:03:2016","04:01:2017"};
         String times[] = {"17:11","08:00","12:30","17:10","18:18"};
-        int id_flights[] = {4,1,2,3,2};
+        int id_flights[] = {4, 1, 2, 4, 2};
 
         for(int i = 0; i < dates.length; i++) {
             ContentValues element = new ContentValues();
@@ -183,6 +185,7 @@ public class AirportDb extends SQLiteOpenHelper {
     private void createViewTicket(SQLiteDatabase db) {
         String string = "CREATE VIEW " + VIEW_TICKET + " AS SELECT " +
                 TABLENAME_TIMETABLE_FLIGHT_CLIENT + "." + TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_CLIENT + ", " +
+                TABLENAME_TIMETABLE_FLIGHT_CLIENT + "." + TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT + ", " +
                 TABLENAME_TIMETABLE_FLIGHT + "." + TIMETABLE_FLIGHT_COLUMN_DATE + ", " +
                 TABLENAME_TIMETABLE_FLIGHT + "." + TIMETABLE_FLIGHT_COLUMN_TIME + ", " +
                 TABLENAME_FLIGHT + "." + FLIGHT_COLUMN_FROM + ", " +
@@ -193,9 +196,8 @@ public class AirportDb extends SQLiteOpenHelper {
                 TABLENAME_TIMETABLE_FLIGHT_CLIENT + "." + TIMETABLE_FLIGHT_CLIENT_COLUMN_ID_TIMETABLE_FLIGHT + " = " +
                 TABLENAME_TIMETABLE_FLIGHT + "." + COLUMN_ID + " " +
                 "INNER JOIN " + TABLENAME_FLIGHT + " ON " +
-                TABLENAME_TIMETABLE_FLIGHT + "." + COLUMN_ID + " = " +
+                TABLENAME_TIMETABLE_FLIGHT + "." + TIMETABLE_FLIGHT_COLUMN_ID_FLIGHT + " = " +
                 TABLENAME_FLIGHT + "." + COLUMN_ID + " ";
         db.execSQL(string);
     }
-
 }
